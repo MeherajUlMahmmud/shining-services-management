@@ -18,21 +18,21 @@ class UserAdapter extends TypeAdapter<User> {
     };
     return User(
       email: fields[0] as String,
+      username: fields[6] as String,
       firstName: fields[1] as String,
       lastName: fields[2] as String,
-      authProvider: fields[3] as String,
-      isVerified: fields[4] as bool,
-      isStaff: fields[5] as bool,
-      isSuperuser: fields[6] as bool,
+      isVerified: fields[3] as bool,
+      isStaff: fields[4] as bool,
+      isAdmin: fields[5] as bool,
       id: fields[7] as int,
-      profilePicture: fields[8] as String,
+      isCrewMember: fields[8] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, User obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.email)
       ..writeByte(1)
@@ -40,17 +40,17 @@ class UserAdapter extends TypeAdapter<User> {
       ..writeByte(2)
       ..write(obj.lastName)
       ..writeByte(3)
-      ..write(obj.authProvider)
-      ..writeByte(4)
       ..write(obj.isVerified)
-      ..writeByte(5)
+      ..writeByte(4)
       ..write(obj.isStaff)
+      ..writeByte(5)
+      ..write(obj.isAdmin)
       ..writeByte(6)
-      ..write(obj.isSuperuser)
+      ..write(obj.username)
       ..writeByte(7)
       ..write(obj.id)
       ..writeByte(8)
-      ..write(obj.profilePicture);
+      ..write(obj.isCrewMember);
   }
 
   @override

@@ -5,76 +5,123 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shining_services_management/cubits/app_theme_cubit.dart';
 import 'package:shining_services_management/cubits/auth_cubit.dart';
 import 'package:shining_services_management/cubits/language_cubit.dart';
+import 'package:shining_services_management/cubits/user_cubit.dart';
+import 'package:shining_services_management/models/user/user.dart';
 import 'package:shining_services_management/utils/constants.dart';
 import 'package:shining_services_management/utils/helper.dart';
 
 class SettingsScreen extends StatelessWidget {
-  static const routeName = AppRoutes.settingsScreenRouteName;
-
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    context.read<UserCubit>().getUserFromLocal();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.accountAndSettings),
       ),
-      body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
-        children: [
-          SizedBox(height: 12.h),
-          _buildProfileSection(context),
-          SizedBox(height: 12.h),
-          _buildPointSection(context),
-          SizedBox(height: 12.h),
-          _buildSection(
-            title: 'Offers',
-            items: [
-              _buildTile(
-                context,
-                icon: Icons.airplane_ticket,
-                title: 'Refer and Earn points',
-                onTap: () =>
-                    Navigator.pushNamed(context, AppRoutes.mainScreenRouteName),
+      body: BlocBuilder<UserCubit, UserState>(
+        builder: (context, state) {
+          if (state.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (state.isError) {
+            return Center(
+              child:
+                  Text("Error: ${state.errorMessage ?? "Failed to load user"}"),
+            );
+          }
+
+          final User? currentUser = state.currentUser;
+          if (currentUser == null) {
+            return const Center(child: Text("No user information available."));
+          }
+
+          return ListView(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+            children: [
+              SizedBox(height: 12.h),
+              _buildProfileSection(context, currentUser),
+              SizedBox(height: 12.h),
+              _buildPointSection(context),
+              SizedBox(height: 12.h),
+              _buildSection(
+                context: context,
+                title: 'Offers',
+                items: [
+                  _buildTile(
+                    context,
+                    icon: Icons.airplane_ticket,
+                    title: 'Refer and Earn points',
+                    onTap: () => Navigator.pushNamed(
+                      context,
+                      AppRoutes.mainScreenRouteName,
+                    ),
+                  ),
+                ],
               ),
+              SizedBox(height: 12.h),
+              _buildSection(
+                context: context,
+                title: 'Settings',
+                items: _settingsItems(context),
+              ),
+              SizedBox(height: 12.h),
+              _buildSection(
+                context: context,
+                title: 'Help & Legal',
+                items: _helpItems(context),
+              ),
+              SizedBox(height: 12.h),
+              _buildSection(
+                context: context,
+                title: 'More',
+                items: _moreItems(context),
+              ),
+              SizedBox(height: 16.h),
+              _buildSignOutButton(context),
             ],
-          ),
-          SizedBox(height: 12.h),
-          _buildSection(
-            title: 'Settings',
-            items: _settingsItems(context),
-          ),
-          SizedBox(height: 12.h),
-          _buildSection(
-            title: 'Help & Legal',
-            items: _helpItems(context),
-          ),
-          SizedBox(height: 12.h),
-          _buildSection(
-            title: 'More',
-            items: _moreItems(context),
-          ),
-          SizedBox(height: 16.h),
-          _buildSignOutButton(context),
-        ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildProfileSection(BuildContext context) {
+  Widget buildThemedContainer({
+    required BuildContext context,
+    required Widget child,
+    EdgeInsetsGeometry? padding,
+  }) {
+    final theme = Theme.of(context);
+    final cardColor = theme.cardTheme.color ?? Colors.white;
+    final shadowColor = theme.cardTheme.shadowColor ?? Colors.grey.withOpacity(0.1);
+
     return Container(
-      padding: EdgeInsets.all(10.w),
+      padding: padding ?? const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
+        color: cardColor,
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: shadowColor,
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
         ],
       ),
+      child: child,
+    );
+  }
+
+
+  Widget _buildProfileSection(BuildContext context, User user) {
+    final theme = Theme.of(context);
+    final textColor = theme.textTheme.bodyLarge?.color ?? Colors.black;
+
+    return buildThemedContainer(
+      context: context,
       child: Row(
         children: [
           Container(
@@ -92,10 +139,11 @@ class SettingsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Meheraj",
+                  "${user.firstName} ${user.lastName}",
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
+                    color: textColor,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -104,7 +152,7 @@ class SettingsScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
-                    color: Colors.black,
+                    color: theme.primaryColor,
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Row(
@@ -142,25 +190,18 @@ class SettingsScreen extends StatelessWidget {
   }
 
   Widget _buildPointSection(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+    final theme = Theme.of(context);
+    final textColor = theme.textTheme.bodyLarge?.color ?? Colors.black;
+    final iconColor = theme.primaryColor;
+
+    return buildThemedContainer(
+      context: context,
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 0),
         leading: Icon(
           Icons.point_of_sale,
           size: 26.sp,
-          color: Theme.of(context).primaryColor,
+          color: iconColor,
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -168,8 +209,9 @@ class SettingsScreen extends StatelessWidget {
             Text(
               "SILVER",
               style: TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w800,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w700,
+                color: textColor,
               ),
             ),
             Text(
@@ -177,6 +219,7 @@ class SettingsScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w400,
+                color: textColor.withOpacity(0.7),
               ),
             ),
           ],
@@ -184,27 +227,24 @@ class SettingsScreen extends StatelessWidget {
         trailing: Icon(
           Icons.arrow_forward_ios,
           size: 16.sp,
-          color: Colors.grey,
+          color: textColor.withOpacity(0.5),
         ),
         onTap: () {},
       ),
     );
   }
 
-  Widget _buildSection({required String title, required List<Widget> items}) {
-    return Container(
-      padding: EdgeInsets.all(10.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+  Widget _buildSection({
+    required BuildContext context,
+    required String title,
+    required List<Widget> items,
+  }) {
+    final theme = Theme.of(context);
+    final textColor = theme.textTheme.bodyLarge?.color ?? Colors.black;
+
+    return buildThemedContainer(
+      context: context,
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -213,6 +253,7 @@ class SettingsScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.bold,
+              color: textColor,
             ),
           ),
           Divider(color: Colors.grey[300]),

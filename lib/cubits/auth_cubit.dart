@@ -114,7 +114,7 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       emit(state.copyWith(status: AuthStatus.loading));
       AppLogger()
-          .info("Starting user sign-in with email: ${loginRequestData.email}");
+          .info("Starting user sign-in with username: ${loginRequestData.username}");
 
       final ApiResponse response =
           await remoteAuthRepository.loginUser(loginRequestData);

@@ -8,8 +8,6 @@ import 'package:shining_services_management/utils/app_logger.dart';
 import 'package:shining_services_management/utils/constants.dart';
 
 class SplashScreen extends StatefulWidget {
-  static const routeName = AppRoutes.splashScreenRouteName;
-
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
@@ -39,12 +37,12 @@ class _SplashScreenState extends State<SplashScreen> {
             if (state.status == AuthStatus.authenticated) {
               AppLogger()
                   .info("User authenticated - navigating to MainScreen.");
-              Navigator.pushReplacementNamed(context, MainScreen.routeName);
+              Navigator.pushReplacementNamed(context, AppRoutes.mainScreenRouteName);
             } else if (state.status == AuthStatus.unauthenticated ||
                 state.status == AuthStatus.error) {
               AppLogger().warn(
                   "User unauthenticated or error occurred - navigating to LoginScreen.");
-              Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+              Navigator.pushReplacementNamed(context, AppRoutes.loginScreenRouteName);
             }
           },
           builder: (context, state) {

@@ -1,5 +1,3 @@
-
-
 import 'package:shining_services_management/data_sources/remote_data_source.dart';
 import 'package:shining_services_management/models/api/api_response.dart';
 import 'package:shining_services_management/models/api/auth_api_request.dart';
@@ -58,6 +56,8 @@ class RemoteAuthRepository implements IRemoteAuthRepository {
 
       if (response['status'] == HTTPStatus.httpOkCode) {
         AppLogger().info("Login request successful.");
+        AppLogger().info("Response");
+        AppLogger().info(response.entries.join(","));
         return ApiResponse(
           status: response['status'],
           data: response['data'],
@@ -67,7 +67,7 @@ class RemoteAuthRepository implements IRemoteAuthRepository {
             .warn("Login request failed with status: ${response['status']}");
         return ApiResponse.error(
           response['status'],
-          response['data']['detail'] ?? 'An error occurred',
+          response['detail'] ?? 'An error occurred',
         );
       }
     } catch (e, stackTrace) {

@@ -14,46 +14,46 @@ class User {
   final String lastName;
 
   @HiveField(3)
-  final String authProvider;
-
-  @HiveField(4)
   final bool isVerified;
 
-  @HiveField(5)
+  @HiveField(4)
   final bool isStaff;
 
+  @HiveField(5)
+  final bool isAdmin;
+
   @HiveField(6)
-  final bool isSuperuser;
+  final String username;
 
   @HiveField(7)
   final int id;
 
   @HiveField(8)
-  final String profilePicture;
+  final bool isCrewMember;
 
   User({
     required this.email,
+    required this.username,
     required this.firstName,
     required this.lastName,
-    required this.authProvider,
     required this.isVerified,
     required this.isStaff,
-    required this.isSuperuser,
+    required this.isAdmin,
     required this.id,
-    required this.profilePicture,
+    required this.isCrewMember,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       email: json['email'],
+      username: json['username'],
       firstName: json['first_name'],
       lastName: json['last_name'],
-      authProvider: json['auth_provider'],
+      isCrewMember: json['is_crew_member'],
       isVerified: json['is_verified'],
       isStaff: json['is_staff'],
-      isSuperuser: json['is_superuser'],
+      isAdmin: json['is_admin'],
       id: json['id'],
-      profilePicture: json['profile_picture'],
     );
   }
 }

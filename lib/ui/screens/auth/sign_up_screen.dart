@@ -5,8 +5,6 @@ import 'package:shining_services_management/ui/widgets/custom_text_field.dart';
 import 'package:shining_services_management/utils/constants.dart';
 
 class SignUpScreen extends StatelessWidget {
-  static const routeName = AppRoutes.signUpScreenRouteName;
-
   const SignUpScreen({super.key});
 
   @override

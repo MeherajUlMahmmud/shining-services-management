@@ -1,19 +1,19 @@
 import 'package:shining_services_management/models/user/user.dart';
 
 class LoginResponse {
-  final String detail;
+  // final String detail;
   final User user;
   final Tokens tokens;
 
   LoginResponse({
-    required this.detail,
+    // required this.detail,
     required this.user,
     required this.tokens,
   });
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
-      detail: json['detail'],
+      // crew_member: json['detail'],
       user: User.fromJson(json['user']),
       tokens: Tokens.fromJson(json['tokens']),
     );
