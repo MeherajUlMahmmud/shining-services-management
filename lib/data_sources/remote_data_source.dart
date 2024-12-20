@@ -7,20 +7,22 @@ class APIService {
 
   APIService()
       : _dio = Dio(BaseOptions(
-    baseUrl: ApiUrl.kBaseUrl,
-    headers: {'Content-Type': 'application/json'},
-    connectTimeout: const Duration(milliseconds: 5000),
-    receiveTimeout: const Duration(milliseconds: 3000),
-  )) {
+          baseUrl: ApiUrl.kBaseUrl,
+          headers: {'Content-Type': 'application/json'},
+          connectTimeout: const Duration(milliseconds: 5000),
+          receiveTimeout: const Duration(milliseconds: 3000),
+        )) {
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
-        AppLogger().info("Starting request: [${options.method}] ${options.uri}");
+        AppLogger()
+            .info("Starting request: [${options.method}] ${options.uri}");
         AppLogger().debug("Request Headers: ${options.headers}");
         AppLogger().debug("Request Data: ${options.data}");
         return handler.next(options);
       },
       onResponse: (response, handler) {
-        AppLogger().info("Received response: [${response.statusCode}] for ${response.requestOptions.uri}");
+        AppLogger().info(
+            "Received response: [${response.statusCode}] for ${response.requestOptions.uri}");
         AppLogger().debug("Response Data: ${response.data}");
         return handler.next(response);
       },
@@ -41,13 +43,15 @@ class APIService {
 
     try {
       final response = await request();
-      AppLogger().info("Request completed successfully with status ${response.statusCode}.");
+      AppLogger().info(
+          "Request completed successfully with status ${response.statusCode}.");
       return {
         'data': response.data,
         'status': response.statusCode,
       };
     } on DioException catch (e) {
-      AppLogger().error("Request failed with DioException: ${e.message}", error: e);
+      AppLogger()
+          .error("Request failed with DioException: ${e.message}", error: e);
       return {
         'error': e.message,
         'status': e.response?.statusCode ?? 500,
@@ -57,7 +61,8 @@ class APIService {
 
   Future<Map<String, dynamic>> sendUnauthenticatedPostRequest(
       Map<String, dynamic> data, String url) async {
-    AppLogger().info("Sending unauthenticated POST request to $url with data: $data");
+    AppLogger()
+        .info("Sending unauthenticated POST request to $url with data: $data");
     final response = await _handleRequest(() => _dio.post(url, data: data));
     AppLogger().info("Unauthenticated POST request to $url completed.");
     return response;
@@ -65,16 +70,17 @@ class APIService {
 
   Future<Map<String, dynamic>> sendPostRequest(
       String accessToken, Map<String, dynamic> data, String url) async {
-    AppLogger().info("Sending authenticated POST request to $url with token: $accessToken and data: $data");
+    AppLogger().info(
+        "Sending authenticated POST request to $url with token: $accessToken and data: $data");
     final response = await _handleRequest(() => _dio.post(
-      url,
-      data: data,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $accessToken',
-        },
-      ),
-    ));
+          url,
+          data: data,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $accessToken',
+            },
+          ),
+        ));
     AppLogger().info("Authenticated POST request to $url completed.");
     return response;
   }
@@ -88,15 +94,16 @@ class APIService {
 
   Future<Map<String, dynamic>> sendGetRequest(
       String accessToken, String url) async {
-    AppLogger().info("Sending authenticated GET request to $url with token: $accessToken");
+    AppLogger().info(
+        "Sending authenticated GET request to $url with token: $accessToken");
     final response = await _handleRequest(() => _dio.get(
-      url,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $accessToken',
-        },
-      ),
-    ));
+          url,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $accessToken',
+            },
+          ),
+        ));
     AppLogger().info("Authenticated GET request to $url completed.");
     return response;
   }
@@ -104,7 +111,8 @@ class APIService {
   Future<Map<String, dynamic>> sendPatchRequest(
       String accessToken, Map<String, dynamic> data, String url,
       {bool isMultipart = false}) async {
-    AppLogger().info("Sending PATCH request to $url with token: $accessToken and data: $data. IsMultipart: $isMultipart");
+    AppLogger().info(
+        "Sending PATCH request to $url with token: $accessToken and data: $data. IsMultipart: $isMultipart");
 
     final options = Options(
       headers: {
@@ -125,13 +133,13 @@ class APIService {
       String accessToken, String url) async {
     AppLogger().info("Sending DELETE request to $url with token: $accessToken");
     final response = await _handleRequest(() => _dio.delete(
-      url,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $accessToken',
-        },
-      ),
-    ));
+          url,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $accessToken',
+            },
+          ),
+        ));
     AppLogger().info("DELETE request to $url completed.");
     return response;
   }

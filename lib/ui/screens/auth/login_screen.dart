@@ -15,14 +15,6 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.appTitle),
-        // actions: [
-        //   IconButton(
-        //     icon: const Icon(Icons.settings),
-        //     onPressed: () {
-        //       Navigator.pushNamed(context, AppRoutes.settingsScreenRouteName);
-        //     },
-        //   ),
-        // ],
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -117,14 +109,14 @@ class LoginForm extends StatelessWidget {
                 controller: passwordController,
                 hintText: AppLocalizations.of(context)!.password,
                 obscureText: !state.isPasswordVisible,
-                // suffixIcon: IconButton(
-                //   icon: Icon(state.isPasswordVisible
-                //       ? Icons.visibility
-                //       : Icons.visibility_off),
-                //   onPressed: () {
-                //     context.read<AuthCubit>().togglePasswordVisibility();
-                //   },
-                // ),
+                suffixIcon: IconButton(
+                  icon: Icon(state.isPasswordVisible
+                      ? Icons.visibility
+                      : Icons.visibility_off),
+                  onPressed: () {
+                    context.read<AuthCubit>().togglePasswordVisibility();
+                  },
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Password is required';

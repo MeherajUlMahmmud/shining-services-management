@@ -7,7 +7,7 @@ class LanguageCubit extends Cubit<LanguageState> {
   final SettingsRepository repository;
 
   LanguageCubit(this.repository)
-      : super(LanguageState(selectedLanguage: AppLanguage.English)) {
+      : super(const LanguageState(selectedLanguage: AppLanguage.English)) {
     _loadLanguage();
   }
 

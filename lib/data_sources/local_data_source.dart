@@ -1,5 +1,4 @@
 import 'package:hive/hive.dart';
-import 'package:shining_services_management/models/api/login_user_response.dart';
 
 class HiveStorageService<T> {
   final Box<T> _box;

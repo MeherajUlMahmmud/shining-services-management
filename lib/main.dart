@@ -14,7 +14,7 @@ import 'package:shining_services_management/models/user/user.dart';
 import 'package:shining_services_management/repositories/auth/local_auth_repository.dart';
 import 'package:shining_services_management/repositories/auth/remote_auth_repository.dart';
 import 'package:shining_services_management/repositories/settings/settings_repository.dart';
-import 'package:shining_services_management/repositories/user/local_user_repositry.dart';
+import 'package:shining_services_management/repositories/user/local_user_repository.dart';
 import 'package:shining_services_management/repositories/user/remote_user_repository.dart';
 import 'package:shining_services_management/ui/screens/utility/splash_screen.dart';
 import 'package:shining_services_management/ui/styles/theme.dart';
@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
             : ThemeMode.light;
 
         return ScreenUtilInit(
-          designSize: const Size(375, 812), // Set your design size here
+          designSize: const Size(375, 812),
           minTextAdapt: true,
           builder: (context, child) {
             return MaterialApp(

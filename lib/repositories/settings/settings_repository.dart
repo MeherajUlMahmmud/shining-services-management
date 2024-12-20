@@ -9,7 +9,6 @@ import 'i_settings_repository.dart';
 class SettingsRepository implements ISettingsRepository {
   final HiveStorageService<Settings> _localStorage;
 
-
   SettingsRepository(Box<Settings> settingsBox)
       : _localStorage = HiveStorageService<Settings>.fromBox(settingsBox);
 

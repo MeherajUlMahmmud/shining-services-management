@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomTextFormField extends StatelessWidget {
@@ -8,6 +7,7 @@ class CustomTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextInputType keyboardType;
   final bool obscureText;
+  final Widget? suffixIcon;
   final ValueChanged<String>? onChanged;
   final TextInputAction textInputAction;
   final FocusNode? focusNode;
@@ -19,6 +19,7 @@ class CustomTextFormField extends StatelessWidget {
     this.validator,
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
+    this.suffixIcon,
     this.onChanged,
     this.textInputAction = TextInputAction.done,
     this.focusNode,
@@ -35,6 +36,7 @@ class CustomTextFormField extends StatelessWidget {
       focusNode: focusNode,
       onChanged: onChanged,
       decoration: InputDecoration(
+        suffixIcon: suffixIcon,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.r),
           borderSide: const BorderSide(color: Colors.transparent, width: 0),

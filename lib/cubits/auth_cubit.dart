@@ -113,8 +113,8 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> signIn(LoginRequest loginRequestData) async {
     try {
       emit(state.copyWith(status: AuthStatus.loading));
-      AppLogger()
-          .info("Starting user sign-in with username: ${loginRequestData.username}");
+      AppLogger().info(
+          "Starting user sign-in with username: ${loginRequestData.username}");
 
       final ApiResponse response =
           await remoteAuthRepository.loginUser(loginRequestData);

@@ -7,7 +7,7 @@ class AppThemeCubit extends Cubit<AppThemeState> {
   final SettingsRepository repository;
 
   AppThemeCubit(this.repository)
-      : super(AppThemeState(selectedAppTheme: AppTheme.light)) {
+      : super(const AppThemeState(selectedAppTheme: AppTheme.light)) {
     _loadThemeMode();
   }
 
