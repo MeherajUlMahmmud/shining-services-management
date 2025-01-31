@@ -20,7 +20,7 @@ import 'package:shining_services_management/ui/screens/utility/splash_screen.dar
 import 'package:shining_services_management/ui/styles/theme.dart';
 import 'package:shining_services_management/utils/constants.dart';
 
-import 'app/routes.dart';
+import 'utils/routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
